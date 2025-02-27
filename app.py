@@ -3,12 +3,12 @@ import requests
 from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
+from pypdf import PdfReader
 
 # Load model SBERT
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 #Tạo làm chuyển Text thành vector rồi lưu và vector database FAISS
-# Chuyển câu hỏi thành vector bằng model SBERT
 def vectorize(context):
     if context !="":
 
@@ -20,15 +20,42 @@ def vectorize(context):
         index.add(vectors)  # Lưu vector vào FAISS
         # st.write("Đã lưu vector vào FAISS!")
 
+# """Trích xuất văn bản từ file PDF."""
+def extract_text_from_pdf(pdf_file):
+    pdf_reader = PdfReader(pdf_file)
+    text = "\n".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
+    return text
+
 # GIAO DIỆN TRANG WEB
 def main():
     st.title("Hỏi đáp với AI")
 
     # Ô upload file
     uploaded_file = st.file_uploader("Tải lên tệp PDF, Word hoặc Text", type=["pdf", "docx", "txt"])
-    #Xử lý dữ liệu (chuyển file pdf, docx về file text)
+    
+    # Tiền xử lý dữ liệu
+    if uploaded_file is not None:
+        file_type = uploaded_file.type
+        # Tiền xử lý dữ liệu file PDF
+        if file_type == "application/pdf":
+            with st.spinner("Đang trích xuất nội dung từ PDF..."):
+                text = extract_text_from_pdf(uploaded_file)
+                st.write(text)
+        # Tiền xử lý dữ liệu file doc    
+        elif file_type in ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]:
+            st.write("Bạn đã upload một file DOC hoặc DOCX.")
 
+        # Tiền xử lý dữ liệu file txt
+        elif file_type == "text/plain":
+            st.write("Bạn đã upload một file TXT.")
+        
+        # Báo file không hợp lệ
+        else:
+            st.write("Định dạng file không hợp lệ.")
+    #Xử lý dữ liệu (chuyển file pdf, docx về file text)
     #Chia các tài liệu thành các phần nhỏ
+
+
 
     #Vectorize các tài liệu text đã được chia nhỏ này và đẩy lên vector database
 
@@ -38,9 +65,6 @@ def main():
 
     # Ô nhập câu hỏi
     question = st.text_input("Đặt câu hỏi của bạn:")
-    # Đẩy dữ liệu lên vector DB
-    vectorize(question)
-
     
     if question:
         # Tra trong vectorDB các dữ liệu nào gần giống với question nhất
@@ -72,9 +96,9 @@ def main():
             st.write('Cảm ơn bạn đã gửi phản hồi')
     
     if uploaded_file:
-        st.write("Bạn đã tải lên:", uploaded_file.name)
-        # files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
-        # response = requests.post("https://bincalam28499.app.n8n.cloud/webhook-test/fed3dad1-f15d-4f2a-9b1d-7a4f4af1f4b1", files=files)  
+        # st.write("Bạn đã tải lên:", uploaded_file.name)
+        files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
+        response = requests.post("https://bincalam28499.app.n8n.cloud/webhook-test/PDF-to-text", files=files)  
     
 
     
