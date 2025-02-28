@@ -40,7 +40,6 @@ def main():
         if file_type == "application/pdf":
             with st.spinner("Đang trích xuất nội dung từ PDF..."):
                 text = extract_text_from_pdf(uploaded_file)
-                st.write(text)
         # Tiền xử lý dữ liệu file doc    
         elif file_type in ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]:
             st.write("Bạn đã upload một file DOC hoặc DOCX.")
@@ -74,8 +73,8 @@ def main():
         # câu prompt để cho vào LLM {context}
         data = {
             "chatInput": f"""Bạn là một trợ lý AI. Sử dụng thông tin sau để trả lời câu hỏi:
-            
-            
+            {text}
+                        
             Câu hỏi: {question}"""
             }
         # Gửi request POST
