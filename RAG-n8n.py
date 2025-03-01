@@ -2,9 +2,15 @@ import streamlit as st
 import requests
 
 
-# Webhook URL API
-webhook_url = "https://bincalam28499.app.n8n.cloud/webhook-test/viACT-agent"    #Test URL
-# webhook_url = "https://bincalam28499.app.n8n.cloud/webhook/viACT-agent"         # Publish URL
+# Webhook URL API - Test
+# question_API_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/viACT-agent"    
+# feedback__API_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/feedback-to-improve-knowledgebase"   
+# upload_API_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/post-to-Google-Drive"   
+
+# Webhook URL API - Publish
+question_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/viACT-agent"     
+feedback__API_URL = "https://bincalam28499.app.n8n.cloud/webhook/feedback-to-improve-knowledgebase"     
+upload_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/post-to-Google-Drive"     
 
 
 # GIAO DIỆN TRANG WEB
@@ -18,7 +24,7 @@ def main():
     
     if question:
         # Gửi question lên Webhook
-        response = requests.post(webhook_url, json={'question':question})
+        response = requests.post(question_API_URL, json={'question':question})
         
         # Lấy về câu trả lời
         ai_response = response.json()
@@ -31,11 +37,13 @@ def main():
     # Đẩy dữ liệu lên vector DB
     if feedback:
         # Gửi feedback lên Webhook
-        response = requests.post(webhook_url, json={'feedback':feedback})
+        response = requests.post(feedback__API_URL, json={'feedback':feedback})
         st.write('Cảm ơn bạn đã gửi phản hồi')
     
-    # if uploaded_file:
-    #     # Tải file lên google drive
+    if uploaded_file:
+        # Tải file lên google drive
+        response = requests.post(upload_API_URL, data={'filename':uploaded_file.name}, files ={'file': (uploaded_file.name, uploaded_file, uploaded_file.type)})
+        st.write("Bạn đã tải lên:", uploaded_file.name)
 
     
 if __name__ == "__main__":
