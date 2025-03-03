@@ -3,14 +3,15 @@ import requests
 
 
 # Webhook URL API - Test
-# question_API_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/viACT-agent"    
-# feedback__API_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/feedback-to-improve-knowledgebase"   
-# upload_API_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/post-to-Google-Drive"   
+question_API_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/viACT-agent"    # query param URL
+feedback__API_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/feedback-to-improve-knowledgebase"   
+upload_API_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/post-to-Google-Drive"
+# question_start_coversation=                                      #Sinh ra doan ma ngau nhien   
 
 # Webhook URL API - Publish
-question_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/viACT-agent"     
-feedback__API_URL = "https://bincalam28499.app.n8n.cloud/webhook/feedback-to-improve-knowledgebase"     
-upload_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/post-to-Google-Drive"     
+# question_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/viACT-agent"     
+# feedback__API_URL = "https://bincalam28499.app.n8n.cloud/webhook/feedback-to-improve-knowledgebase"     
+# upload_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/post-to-Google-Drive"     
 
 
 # GIAO DIỆN TRANG WEB
@@ -43,7 +44,7 @@ def main():
     if uploaded_file:
         # Tải file lên google drive
         response = requests.post(upload_API_URL, data={'filename':uploaded_file.name}, files ={'file': (uploaded_file.name, uploaded_file, uploaded_file.type)})
-        st.write("Bạn đã tải lên:", uploaded_file.name)
+        st.write("Bạn đã tải lên:", uploaded_file.name, "vui lòng chờ vài giây để kiến thức được cập nhật")
 
     
 if __name__ == "__main__":
