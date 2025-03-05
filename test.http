@@ -1,7 +1,0 @@
-POST https://bincalam28499.app.n8n.cloud/webhook-test/c7d1adb6-87e5-4b0e-8381-5e029655cb96
-Content-Type: application/json
-
-{
-  "file_name": "Test Assignment - AI Engineer.pdf",
-  "google_drive_link": "https://drive.google.com/drive/u/0/folders/1zgOT3tFMTK53X9xwZJksx5kAHcXbygXC"
-}
