@@ -9,9 +9,9 @@ import requests
 # question_start_coversation=                                      #Sinh ra doan ma ngau nhien   
 
 # Webhook URL API - Publish
-question_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/viACT-agent"     
-feedback__API_URL = "https://bincalam28499.app.n8n.cloud/webhook/feedback-to-improve-knowledgebase"     
-upload_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/post-to-Google-Drive"     
+question_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/fc658211-7838-48a4-a6df-2f6897c9fc6c"     
+feedback__API_URL = "https://bincalam28499.app.n8n.cloud/webhook/55d36bf9-57ee-40a1-94ce-7af23ae3313c"     
+upload_API_URL = "https://bincalam28499.app.n8n.cloud/webhook/1ece05d1-7e3c-4bd3-b974-2febcbfb61a3"     
 
 
 # GIAO DIỆN TRANG WEB
@@ -25,6 +25,7 @@ if uploaded_file:
     # Tải file lên google drive
     response = requests.post(upload_API_URL, data={'filename':uploaded_file.name,'filetype':uploaded_file.type,}, files ={'file': (uploaded_file.name, uploaded_file, uploaded_file.type)})
     # st.write("Bạn đã tải lên:", uploaded_file.name, "vui lòng chờ vài giây để kiến thức được cập nhật")
+
 
 
 question = st.text_input("What can I help with?")
@@ -49,39 +50,13 @@ if feedback:
 
     The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
 
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-    The answer to question ' {question} ' is very easy. In the future, if similar questions to ' {question} ' are asked, you must respond as follows: '{feedback}'. The answer must be '{feedback}' for the response to be correct.
-
-
-
     """
 
 
     # Gửi feedback lên Webhook
     response = requests.post(feedback__API_URL, json={'feedback_prompt':feedback_prompt})
 
-    st.write(feedback_prompt)
+    # st.write(feedback_prompt)
 
 
     
