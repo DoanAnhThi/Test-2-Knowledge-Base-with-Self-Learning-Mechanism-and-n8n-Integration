@@ -1,40 +1,58 @@
 import streamlit as st
-import requests
+# from PyPDF2 import PdfReader
+# from docx import Document
 
-# URL webhook của n8n (thay thế bằng webhook của bạn)
-# N8N_WEBHOOK_URL = "https://bincalam28499.app.n8n.cloud/webhook/b403cf13-1468-4a6e-b412-c60eb47979a7" #publish
-N8N_WEBHOOK_URL = "https://bincalam28499.app.n8n.cloud/webhook-test/b403cf13-1468-4a6e-b412-c60eb47979a7" #test
+st.set_page_config(page_title="Tuyết Hương xin đẹp", layout="wide")
 
-# Cấu hình giao diện Streamlit
-st.title("💬 Tuyết Hương xin đệp ")
-st.write("Nhập câu hỏi của bạn vào bên dưới:")
+# Sidebar để tải file lên
+with st.sidebar:
+    st.header("Upload File")
+    uploaded_file = st.file_uploader("Chọn file (doc, docx, pdf, txt)", type=["doc", "docx", "pdf", "txt"])
+    if uploaded_file:
+        file_details = {"Filename": uploaded_file.name, "FileType": uploaded_file.type, "FileSize": uploaded_file.size}
+        st.write(file_details)
+        
+        # # Đọc nội dung file
+        # if uploaded_file.type == "text/plain":
+        #     text = str(uploaded_file.read(), "utf-8")
+        # elif uploaded_file.type == "application/pdf":
+        #     pdf_reader = PdfReader(uploaded_file)
+        #     text = "\n".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
+        # elif uploaded_file.type in ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]:
+        #     doc = Document(uploaded_file)
+        #     text = "\n".join([para.text for para in doc.paragraphs])
+        # else:
+        #     text = "Không thể đọc file này."
+        # st.text_area("Nội dung file:", text, height=200)
 
-# Lưu trạng thái chat
+# Tiêu đề luôn hiển thị
+# st.markdown("<h1 style='text-align: center;'>💬 Tuyết Hương xin đẹp</h1>", unsafe_allow_html=True)
+
+title_container = st.empty()
+with title_container:
+    st.markdown("<h1 style='text-align: center;'>💬 Tuyết Hương xin đẹp</h1>", unsafe_allow_html=True)
+
+
+# Vùng chat cố định
+chat_container = st.container()
+
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state["messages"] = []
 
-# Hiển thị lịch sử tin nhắn
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+# Hiển thị lịch sử chat
+with chat_container:
+    for message in st.session_state["messages"]:
+        st.chat_message("user" if message["role"] == "user" else "assistant").write(message["content"])
 
-# Hộp nhập văn bản từ người dùng
-user_input = st.chat_input("Nhập câu hỏi...")
+# Ô nhập tin nhắn
+user_input = st.text_input("Nhập câu hỏi...", key="user_input")
 if user_input:
-    # Lưu tin nhắn của người dùng
-    st.session_state.messages.append({"role": "user", "content": user_input})
-    with st.chat_message("user"):
-        st.markdown(user_input)
+    st.session_state["messages"].append({"role": "user", "content": user_input})
+    with chat_container:
+        st.chat_message("user").write(user_input)
     
-    # Gửi yêu cầu đến webhook của n8n
-    response = requests.post(N8N_WEBHOOK_URL, json={"question": user_input})
-    
-    if response.status_code == 200:
-        bot_reply = response.json().get("answer", "Xin lỗi, tôi không hiểu câu hỏi của bạn.")
-    else:
-        bot_reply = response.json().get("output", "")
-    
-    # Hiển thị câu trả lời từ chatbot
-    st.session_state.messages.append({"role": "assistant", "content": bot_reply})
-    with st.chat_message("assistant"):
-        st.markdown(bot_reply)
+    # Giả lập phản hồi từ chatbot
+    response = "Xin lỗi, tôi không hiểu câu hỏi của bạn."  # Thay bằng chatbot thực tế của bạn
+    st.session_state["messages"].append({"role": "assistant", "content": response})
+    with chat_container:
+        st.chat_message("assistant").write(response)
